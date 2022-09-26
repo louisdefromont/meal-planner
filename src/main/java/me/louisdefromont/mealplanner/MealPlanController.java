@@ -1,6 +1,5 @@
 package me.louisdefromont.mealplanner;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -11,13 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import me.louisdefromont.DailyMealPlan;
-import me.louisdefromont.Ingredient;
-import me.louisdefromont.Meal;
-import me.louisdefromont.Nutrient;
-import me.louisdefromont.NutritionalValue;
-import me.louisdefromont.Recipe;
 
 @RestController
 @RequestMapping("/mealPlanner")

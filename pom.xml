@@ -41,11 +41,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>me.louisdefromont</groupId>
-			<artifactId>meal-planner-dependencies</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

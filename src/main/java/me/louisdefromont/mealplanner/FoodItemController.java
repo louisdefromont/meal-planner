@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import me.louisdefromont.FoodItem;
-import me.louisdefromont.Nutrient;
-import me.louisdefromont.NutritionalValue;
-
 @RestController
 @RequestMapping("/foodItems")
 public class FoodItemController {
