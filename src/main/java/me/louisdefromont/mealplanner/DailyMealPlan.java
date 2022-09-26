@@ -19,6 +19,10 @@ public class DailyMealPlan {
 		meals = new ArrayList<Meal>();
 	}
 
+	public DailyMealPlan(List<Meal> meals) {
+		this.meals = meals;
+	}
+
 	public void generate(List<Recipe> allRecipes) {
 		while (getCalories() < 2000) {
 			Recipe recipe = allRecipes.get((int) (Math.random() * allRecipes.size()));
@@ -60,5 +64,33 @@ public class DailyMealPlan {
 
 	public double getPrice() {
 		return meals.stream().mapToDouble(meal -> meal.getPrice()).sum();
+	}
+
+	public DailyMealPlan deepCopy()
+	{
+		List<Meal> meals = new ArrayList<Meal>();
+		this.meals.stream().forEach(meal -> meals.add(meal.deepCopy()));
+		return new DailyMealPlan(meals);
+	}
+
+	public void mutate(List<Recipe> allRecipes) {
+		if (getCalories() < 2000) {
+			Recipe recipe = allRecipes.get((int) (Math.random() * allRecipes.size()));
+			Optional<Meal> meal = getMeal(recipe);
+			if (meal.isPresent()) {
+				meal.get().increaseQuanity(1);
+			} else {
+				meals.add(new Meal(recipe, 1));
+			}
+		} else {
+			if (meals.size() > 0) {
+				meals.remove((int) (Math.random() * meals.size()));
+			}
+		}
+
+		if (getCalories() < 2000)
+		{
+			mutate(allRecipes);
+		}
 	}
 }

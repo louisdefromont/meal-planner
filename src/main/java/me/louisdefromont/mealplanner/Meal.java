@@ -42,4 +42,9 @@ public class Meal {
 	public double getPrice() {
 		return (recipe.getPrice() / recipe.getServingsCount()) * quantity;
 	}
+
+	public Meal deepCopy() {
+		Meal meal = new Meal(recipe, quantity);
+		return meal;
+	}
 }
