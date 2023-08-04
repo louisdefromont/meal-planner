@@ -14,21 +14,47 @@ import lombok.Getter;
 public class DailyMealPlan {
 
 	private List<Meal> meals;
+	private DailyMealPlan maxMeals;
 
 	public DailyMealPlan() {
 		meals = new ArrayList<Meal>();
+		this.maxMeals = null;
 	}
 
-	public DailyMealPlan(List<Meal> meals) {
+	public DailyMealPlan(DailyMealPlan maxMeals) {
+		meals = new ArrayList<Meal>();
+		this.maxMeals = maxMeals;
+	}
+
+	public DailyMealPlan(List<Meal> meals, DailyMealPlan maxMeals) {
 		this.meals = meals;
+		this.maxMeals = maxMeals;
 	}
 
 	public void generate(List<Recipe> allRecipes) {
 		while (getCalories() < 2000) {
 			Recipe recipe = allRecipes.get((int) (Math.random() * allRecipes.size()));
-			Optional<Meal> meal = getMeal(recipe);
-			if (meal.isPresent()) {
+			incrementMeal(recipe, 1);
+		}
+	}
+
+	private void incrementMeal(Recipe recipe, int quantity) {
+		Optional<Meal> meal = getMeal(recipe);
+		if (meal.isPresent()) {
+			if (maxMeals != null) {
+				Optional<Meal> maxMeal = maxMeals.getMeal(recipe);
+				if (! (maxMeal.isPresent() && meal.get().getQuantity() >= maxMeal.get().getQuantity())) {
+					meal.get().increaseQuanity(1);
+				}
+			} else {
 				meal.get().increaseQuanity(1);
+			}
+		} else {
+			if (maxMeals != null) {
+				Optional<Meal> maxMeal = maxMeals.getMeal(recipe);
+				if (! (maxMeal.isPresent() && maxMeal.get().getQuantity() < 1)) {
+					meals.add(new Meal(recipe, 1));
+				}
 			} else {
 				meals.add(new Meal(recipe, 1));
 			}
@@ -70,18 +96,14 @@ public class DailyMealPlan {
 	{
 		List<Meal> meals = new ArrayList<Meal>();
 		this.meals.stream().forEach(meal -> meals.add(meal.deepCopy()));
-		return new DailyMealPlan(meals);
+		DailyMealPlan copy = new DailyMealPlan(meals, maxMeals);
+		return copy;
 	}
 
 	public void mutate(List<Recipe> allRecipes) {
 		if (getCalories() < 2000) {
 			Recipe recipe = allRecipes.get((int) (Math.random() * allRecipes.size()));
-			Optional<Meal> meal = getMeal(recipe);
-			if (meal.isPresent()) {
-				meal.get().increaseQuanity(1);
-			} else {
-				meals.add(new Meal(recipe, 1));
-			}
+			incrementMeal(recipe, 1);
 		} else {
 			if (meals.size() > 0) {
 				meals.remove((int) (Math.random() * meals.size()));
